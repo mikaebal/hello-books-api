@@ -1,9 +1,49 @@
-from flask import Blueprint, abort, make_response
-# from app.models.book import books
+from flask import Blueprint, abort, make_response, request
+from app.models.book import Book
+from ..db import db
 
 # define blueprint instance
 books_bp = Blueprint("books_bp", __name__, url_prefix="/books")
 
+
+# lesson 3 endpoint with flask
+@books_bp.post("")
+def create_book():
+    request_body = request.get_json()
+    title = request_body["title"]
+    description = request_body["description"]
+
+    new_book = Book(title=title, description=description)
+    db.session.add(new_book)
+    db.session.commit()
+
+    response = {
+        "id": new_book.id,
+        "title": new_book.title,
+        "description": new_book.description,
+    }
+    return response, 201
+
+@books_bp.get("")
+def get_all_books():
+    query = db.select(Book).order_by(Book.id)
+    books = db.session.scalars(query)
+    # We could also write the line above as:
+    # books = db.session.execute(query).scalars()
+
+    books_response = []
+    for book in books:
+        books_response.append(
+            {
+                "id": book.id,
+                "title": book.title,
+                "description": book.description
+            }
+        )
+    return books_response
+
+
+# lesson 2
 # @books_bp.get("")
 # def get_all_books():
 #     books_response = []
