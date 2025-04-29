@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, make_response, request
+from flask import Blueprint, abort, make_response, request, response
 from app.models.book import Book
 from ..db import db
 
@@ -13,6 +13,7 @@ def create_book():
     title = request_body["title"]
     description = request_body["description"]
 
+    # converting to python data type from json
     new_book = Book(title=title, description=description)
     db.session.add(new_book)
     db.session.commit()
@@ -49,6 +50,9 @@ def get_one_book(book_id):
     query = db.select(Book).where(Book.id == book_id)
     book = db.session.scalar(query)
 
+    # lecture 
+    # cat = validate_cat(id)
+
     return {
         "id": book.id,
         "title": book.title,
@@ -61,10 +65,12 @@ def update_book(book_id):
     book = validate_book(book_id)
     request_body = request.get_json()
 
+    # instance of Book, making changes in db Model
     book.title = request_body["title"]
     book.description = request_body["description"]
     db.session.commit()
 
+    # import response 
     return Response(status=204, mimetype="application/json")
 
 # deleting endpoint separately

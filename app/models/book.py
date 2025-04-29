@@ -14,6 +14,8 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from ..db import db
 
+# Book is derived from db.Model
+# db.Model is derived from DeclarativeBase
 class Book(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
