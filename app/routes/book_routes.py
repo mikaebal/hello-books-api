@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, make_response, request, response
+from flask import Blueprint, abort, make_response, request, Response
 from app.models.book import Book
 from ..db import db
 
