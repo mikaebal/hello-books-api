@@ -27,10 +27,27 @@ def create_book():
 
 @books_bp.get("")
 def get_all_books():
-    query = db.select(Book).order_by(Book.id)
-    books = db.session.scalars(query)
-    # We could also write the line above as:
-    # books = db.session.execute(query).scalars()
+    # lesson 5 refactor
+
+    # Select object
+    query = db.select(Book)
+
+    title_param = request.args.get("title")
+    if title_param:
+        query = query.where(Book.title.ilike(f"%{title_param}%"))
+
+    description_param = request.args.get("description")
+    if description_param:
+        query = query.where(Book.description.ilike(f"%{description_param}%"))
+
+    # update query by book id to whichever the query refers to above
+    query = query.order_by(Book.id)
+
+    books = db.session.scalars(query.order_by(Book.id))
+
+    # query = db.select(Book).order_by(Book.id)
+    # books = db.session.scalars(query)
+
 
     books_response = []
     for book in books:
