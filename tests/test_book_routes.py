@@ -1,3 +1,6 @@
+# dont have to import client fixture bc it's a parameter
+# make sure it takes in a parameter in routes/init
+
 def test_get_all_books_with_no_records(client):
     # Act
     response = client.get("/books")
@@ -6,6 +9,9 @@ def test_get_all_books_with_no_records(client):
     # Assert
     assert response.status_code == 200
     assert response_body == []
+
+    #lecture w/o act: response_body
+    # assert response.get_json() == []
 
 
 def test_get_one_book(client, two_saved_books):
@@ -40,3 +46,10 @@ def test_create_one_book(client):
         "title": "New Book",
         "description": "The Best!"
     }
+
+    # lecture
+    # check if db was created 
+    # import 
+    # query =
+    # new_cat = 
+    # assert 

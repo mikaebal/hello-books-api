@@ -6,8 +6,14 @@ from dotenv import load_dotenv
 import os
 from app.models.book import Book
 
+# don't have to import conftest
+# just bookkeeping purposes
+# loads automatically when tests runs
+
 load_dotenv()
 
+# lets us create an app to use a test
+# calls app: from app import create_app
 @pytest.fixture
 def app():
     test_config = {
@@ -25,7 +31,7 @@ def app():
     # designates application context
     with app.app_context():
         db.create_all()  # recreates tables needed for models
-        yield app
+        yield app        # allows func to resume later on 
 
     with app.app_context():
         db.drop_all()

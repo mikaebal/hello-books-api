@@ -13,7 +13,7 @@ import os
 # lesson 2
 from .routes.book_routes import books_bp
 
-
+# lesson 6 add config as param
 def create_app(config=None):
     app = Flask(__name__)
 
