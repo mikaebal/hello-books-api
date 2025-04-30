@@ -29,7 +29,8 @@ def create_book():
 def get_all_books():
     # lesson 5 refactor
 
-    # Select object
+    # Part 1 - building Select object
+    # will always start by selecting book
     query = db.select(Book)
 
     title_param = request.args.get("title")
@@ -40,11 +41,18 @@ def get_all_books():
     if description_param:
         query = query.where(Book.description.ilike(f"%{description_param}%"))
 
-    # update query by book id to whichever the query refers to above
+    # Part 2 - update query by book id to whichever the query refers to above
+    # will always end by ordering book id despite what happens in middle
+    # book.id.desc() to desend order
     query = query.order_by(Book.id)
 
     books = db.session.scalars(query.order_by(Book.id))
 
+    # lecture version
+    # query = query.order_by(Cat.name)
+    # books = db.session.scalars(query)
+
+    # Learn version
     # query = db.select(Book).order_by(Book.id)
     # books = db.session.scalars(query)
 
