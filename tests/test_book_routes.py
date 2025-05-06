@@ -1,3 +1,4 @@
+import pytest
 # dont have to import client fixture bc it's a parameter
 # make sure it takes in a parameter in routes/init
 
@@ -53,3 +54,50 @@ def test_create_one_book(client):
     # query =
     # new_cat = 
     # assert 
+
+
+# lesson 7
+def test_create_one_book_no_title(client):
+    # Arrange
+    test_data = {"description": "The Best!"}
+
+    # Act
+    response = client.post("/books", json=test_data)
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 400
+    assert response_body == {'message': 'Invalid request: missing title'}
+
+def test_create_one_book_no_description(client):
+    # Arrange
+    test_data = {"title": "New Book"}
+
+    # Act
+    response = client.post("/books", json=test_data)
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 400
+    assert response_body == {'message': 'Invalid request: missing description'}
+
+def test_create_one_book_with_extra_keys(client):
+    # Arrange
+    test_data = {
+        "extra": "some stuff",
+        "title": "New Book",
+        "description": "The Best!",
+        "another": "last value"
+    }
+
+    # Act
+    response = client.post("/books", json=test_data)
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 201
+    assert response_body == {
+        "id": 1,
+        "title": "New Book",
+        "description": "The Best!"
+    }
